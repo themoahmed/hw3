@@ -84,7 +84,24 @@ Node* llfilter(Node* head, Comp pred)
     // Provide your implementation below
     //*********************************************
 
+    // Base case: if head is null, return null
+    if (head == nullptr)
+        return nullptr;
+
+    // Recursive case: filter the rest of the list
+    head->next = llfilter(head->next, pred);
+
+    // If the current node satisfies the predicate, return the next node
+    if (pred(head->val)) {
+        Node* nextNode = head->next;
+        delete head;
+        return nextNode;
+    }
+
+    // If the current node does not satisfy the predicate, return itself
+    return head;
 
 }
+
 
 #endif
