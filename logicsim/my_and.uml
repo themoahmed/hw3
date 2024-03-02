@@ -1,0 +1,46 @@
+Tree after pushing: 0xaaaad122e210
+0xaaaad122e210 
+Tree after pushing: 0xaaaad122f260
+0xaaaad122e210 0xaaaad122f260 
+Tree after pushing: 0xaaaad122e230
+0xaaaad122e210 0xaaaad122f260 0xaaaad122e230 
+Tree after pushing: 0xaaaad122f280
+0xaaaad122e210 0xaaaad122f260 0xaaaad122e230 0xaaaad122f280 
+Tree after pushing: 0xaaaad122f260
+0xaaaad122f260 0xaaaad122f280 0xaaaad122e230 
+Tree after pushing: 0xaaaad122e230
+0xaaaad122e230 0xaaaad122f280 
+Tree after pushing: 0xaaaad122f280
+0xaaaad122f280 
+@startuml
+binary "input A" as W0
+binary "input B" as W1
+binary "output" as W2
+
+@0
+W0 is {low,high} 
+W1 is {low,high} 
+W2 is {low,high} 
+
+@0
+W0 is low
+
+W1 is high
+
+@0
+W2 is low
+
+@4
+W0 is high
+
+@4
+W2 is high
+
+@6
+W1 is low
+
+@6
+W2 is low
+
+@enduml
+

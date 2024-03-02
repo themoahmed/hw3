@@ -3,7 +3,7 @@
 #include <functional>
 #include <stdexcept>
 #include <vector>
-#include <iostream>
+
 
 template <typename T, typename PComparator = std::less<T> >
 class Heap
@@ -114,24 +114,29 @@ T const & Heap<T,PComparator>::top() const
 
 
 template <typename T, typename PComparator>
-void Heap<T,PComparator>::push(const T& obj){
-  tree.push_back(obj);
-  int tree_size = tree.size()-1;
+void Heap<T,PComparator>::push(const T& obj) {
+    
+    tree.push_back(obj);
+    
+    int childIndex = tree.size() - 1;
 
-  std::size_t parent_idx = (tree_size - 1) / 2;
-  while(tree_size !=0 && comp(tree[tree_size], tree[parent_idx])){
-    std::swap(tree[tree_size], tree[parent_idx]);
-    tree_size = parent_idx;
-    parent_idx = (tree_size - 1) / 2;
-  }
-  //pushback
-  std::cout << "Tree after pushing: " << obj << std::endl;
-    for (const T& elem : tree) {
-        std::cout << elem << ' ';
+    // HeapUp
+    while (childIndex > 0) {
+        int parentIndex = (childIndex - 1) / m_ary;
+
+        if (comp(tree[childIndex], tree[parentIndex])) {
+          
+            std::swap(tree[childIndex], tree[parentIndex]);
+            
+            childIndex = parentIndex;
+        } else {
+           
+            break;
+        }
     }
-    std::cout << std::endl;
 
 }
+
 
 
 template <typename T, typename PComparator>
@@ -149,67 +154,43 @@ size_t Heap<T,PComparator>::size() const {
 }
 
 
-// We will start pop() for you to handle the case of 
-// calling top on an empty heap
 template <typename T, typename PComparator>
-void Heap<T,PComparator>::pop()
-{
-  if(empty()){
-    // ================================
-    // throw the appropriate exception
-    // ================================
-    throw std::underflow_error("stack underflow error");
+void Heap<T,PComparator>::pop(){
+    if(empty()){
+        throw std::underflow_error("Heap is empty");
+    }
 
-  }
+    // Swap the root with the last element
+    std::swap(tree[0], tree.back());
+    // Remove the last element
+    tree.pop_back();
 
-  //swap the first element with the last element
-  std::swap(tree[0], tree[tree.size()-1]);
+    // Heapify down
+    size_t index = 0;
 
-  //remove the last element
-  tree.pop_back();
+    while (true) {
+        size_t firstChild = m_ary * index + 1; // First child
+        size_t lastChild = m_ary * index + m_ary; // Last child
+        size_t smallestChildIdx = index;
 
-  //if its not empty heapify up
-  if(!tree.empty()){
-
-    int index = 0;
-    while(index < tree.size()){
-      std::size_t left_child = index;
-      std::size_t right_child;
-
-      for(int i = 1; i<= m_ary; i++){
-        right_child = m_ary*index* + 1;
-
-          if(right_child < tree.size()){
-            if(comp(tree[right_child], tree[left_child])){
-              left_child = right_child;
+        // Find the smallest among the node and all its children
+        for (size_t i = firstChild; i <= lastChild && i < tree.size(); ++i) {
+            if (comp(tree[i], tree[smallestChildIdx])) {
+                smallestChildIdx = i;
             }
-          }
-      }
+        }
 
-      if(left_child == index){
-        break;
-      }
-
-      std::swap(tree[index], tree[left_child]);
-      index = left_child;
-
-
-     std::cout << "Tree after popping: " << std::endl;
-    for (const T& elem : tree) {
-        std::cout << elem << ' ';
+        
+        if (smallestChildIdx != index) {
+            std::swap(tree[index], tree[smallestChildIdx]);
+            index = smallestChildIdx;
+        } else {
+            
+            break;
+        }
     }
-    std::cout << std::endl;
-
-
-    }
-  }
-
-
-
-
-
-
 }
+
 
 
 
